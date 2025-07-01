@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f6ff;
+    color: #002244;
+    margin: 0;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .form-section {
+    width: 63%;
+  }
+  .escalation-section {
+    width: 35%;
+    background-color: #e8f1ff;
+    border: 1px solid #004080;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  .escalation-section table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .escalation-section th {
+    background-color: #004080;
+    color: white;
+    padding: 5px;
+  }
+  .escalation-section td {
+    border: 1px solid #ccc;
+    padding: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+  }
+  th {
+    background-color: #004080;
+    color: white;
+    font-size: 13px;
+  }
+  td {
+    border: 1px solid #cccccc;
+    padding: 4px;
+    vertical-align: top;
+  }
+  select, textarea, input[type="textbox"], input[type="email"] {
+    width: 100%;
+    padding: 2px;
+    font-size: 11px;
+  }
+  input[type="button"], input[type="reset"] {
+    background-color: #004080;
+    color: white;
+    padding: 4px 10px;
+    font-size: 11px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  input[type="button"]:hover, input[type="reset"]:hover {
+    background-color: #0059b3;
+  }
+</style>
+
+</head>
+
+	<script type="text/javascript">
+	
+function dispqopts() {
+    var x = document.getElementById("myissue").value;
+
+    var sections = ["certq", "iconnq", "latencyq", "1webq", "anywebq", "authq", "updownq", "zdxq"];
+    sections.forEach(function(section) {
+        var el = document.getElementById(section);
+        if (el) {
+            el.style.display = 'none';
+            try {
+                el.reset(); // if it's a form
+            } catch (e) {}
+        }
+    });
+
+    if (x !== "select1") {
+        var selected = document.getElementById(x + "q");
+        if (selected) {
+            selected.style.display = 'block';
+        }
+    }
+
+    var helpPortal = document.getElementById("helpPortal");
+    if (x === "cert") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/certificate-errors" target="_blank">Help on Certificate Issues</a>';
+    } else if (x === "iconn") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/intermittent-connectivity" target="_blank">Help on Intermittent Connectivity</a>';
+    } else if (x === "latency") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/performance-troubleshooting" target="_blank">Help on Latency Issues</a>';
+    } else if (x === "1web") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/url-troubleshooting" target="_blank">Help on Website Access Issues</a>';
+    } else if (x === "anyweb") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/web-access-troubleshooting" target="_blank">Help on Accessing Any Website</a>';
+    } else if (x === "auth") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/authentication-troubleshooting" target="_blank">Help on Authentication Issues</a>';
+    } else if (x === "updown") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zia/upload-download-troubleshooting" target="_blank">Help on Upload/Download Issues</a>';
+    } else if (x === "zdx") {
+        helpPortal.innerHTML = '<a href="https://help.zscaler.com/zdx" target="_blank">Help on ZDX Troubleshooting</a>';
+    } else {
+        helpPortal.innerHTML = '';
+    }
+}
+
+function copytext() {
+			var f = document.getElementById("mdsform"); 
+			var txt = "";
+			var i;
+			var divq;
+			var SI = document.getElementById("myissue").value + "q";
+			for (i=1; i<f.length-1; i++) {
+				if (i === 9){
+					if (SI === "certq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Certificate Errors/Issues\n";
+						divq = 12;
+						} 
+					else if (SI === "iconnq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Intermittent Connectivity\n" ;
+						divq = 13;
+						}
+					else if (SI === "latencyq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Latency\n";
+						divq = 8;
+						}
+					else if (SI === "1webq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Unable to Access 1 Website\n";
+						divq = 11;
+						}
+					else if (SI === "anywebq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Unable to Access any Website\n";
+						divq = 5;
+						}
+					else if (SI === "authq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Unable to Authenticate\n";
+						divq = 12;
+						}
+					
+					else if (SI === "zdxq") {
+						txt = txt + document.getElementById(i).innerHTML + ": ZDX Related Issues\n";
+						divq = 5;
+					}
+
+					else if (SI === "updownq") { 
+						txt = txt + document.getElementById(i).innerHTML + ": Unable to Download or Upload\n";
+						divq = 7;
+						}
+				} else { txt = txt + document.getElementById(i).innerHTML + ":" + f.elements[i-1].value + "\n"; } 
+			}
+			
+			if (divq != 0) {
+				var f = document.getElementById(SI);
+				for (i=1; i<=divq; i++) { txt = txt + document.getElementById(SI+i).innerHTML + ":" + f.elements[SI+"a"+i].value + "\n"; }
+				}
+			var dummy = document.createElement("PRE");
+			document.body.appendChild(dummy);
+			dummy.setAttribute("id", "dummyid");
+			document.getElementById("dummyid").innerHTML=txt;
+			var range = document.createRange();
+			range.selectNode(document.getElementById("dummyid"));
+			window.getSelection().addRange(range);
+			document.execCommand("copy");
+			document.body.removeChild(dummy);
+		}
+		</script>
+	</head>
+	<body>
+
+<div class="header-logo" style="text-align: center; margin-bottom: 10px;">
+    <img src="LB.png" alt="LevelBlue Logo" style="height: 40px;" />
+</div>
+
+
+
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f6ff;
+    color: #002244;
+    margin: 0;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .form-section {
+    width: 63%;
+  }
+  .escalation-section {
+    width: 35%;
+    background-color: #e8f1ff;
+    border: 1px solid #004080;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  .escalation-section table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .escalation-section th {
+    background-color: #004080;
+    color: white;
+    padding: 5px;
+  }
+  .escalation-section td {
+    border: 1px solid #ccc;
+    padding: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+  }
+  th {
+    background-color: #004080;
+    color: white;
+    font-size: 13px;
+  }
+  td {
+    border: 1px solid #cccccc;
+    padding: 4px;
+    vertical-align: top;
+  }
+  select, textarea, input[type="textbox"], input[type="email"] {
+    width: 100%;
+    padding: 2px;
+    font-size: 11px;
+  }
+  input[type="button"], input[type="reset"] {
+    background-color: #004080;
+    color: white;
+    padding: 4px 10px;
+    font-size: 11px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  input[type="button"]:hover, input[type="reset"]:hover {
+    background-color: #0059b3;
+  }
+</style>
+
+
+<div class="container"><div class="form-section">
+
+
+
+		<form id="mdsform">
+		<table border=1>
+			<tbody>
+				<tr><th colspan=2>Zscaler WebMDS Form</th></tr>
+				<tr>
+					<td><table>
+						<tbody>
+							<tr><th colspan=2><span style="text-decoration: underline;">Requester Information</span><pre>		</pre></th></tr>
+							<tr><td><div id="1">Requester Name</div></td><td><input id="name" type="textbox" maxlength=100 autofocus /></td></tr>
+							<tr><td><div id="2">Requester Email</div></td><td><input id="email" type="email"/></td></tr>
+							<tr><td><div id="3">Requester Phone (+Country Code - #)</div></td><td><input id="phone" type="textbox" /></td></tr>
+						</tbody>
+					</table></td>
+					<td><table>
+						<tbody>
+							<tr><th colspan=2><span style="text-decoration: underline;">Affected User Information</span></th></tr>
+							<tr><td><div id="4">Name of user</div></td><td><input id="name" type="textbox" maxlength=100 autofocus /></td></tr>
+							<tr><td><div id="5">Email of user</div></td><td><input id="email" type="email"/></td></tr>
+							<tr><td><div id="6">Phone (+Country Code - #)</div></td><td><input id="phone" type="textbox" /></td></tr>
+							<tr><td><div id="7">Location Name</div></td><td><input id="users" type="textbox" /></td></tr>
+							<tr><td><div id="8">Tunnel Source IP(Peer)</div></td><td><input id="bttc" type="textbox" /></td></tr>
+						</tbody>
+					</table></td>
+				</tr>
+				<tr><td colspan=2>
+					<table>
+						<tbody>
+							<tr>
+								<td>Select the issue faced<div id="9" hidden>Issue Faced</div></td>
+								<td>
+									<select id="myissue" onchange="dispqopts()">
+										<option value="select1" selected>Select One/See Comments</option>
+										<option value="cert">Certificate Errors/Issues</option>
+										<option value="iconn">Intermittent Connectivity</option>
+										<option value="latency">Latency</option>
+										<option value="1web">Unable to Access 1 Website</option>
+										<option value="anyweb">Unable to Access ANY Website</option>
+										<option value="auth">Unable to Authenticate</option>
+										<option value="updown">Unable to Download or Upload</option>
+									
+<option value="zdx">ZDX Related Issues</option>
+</select>
+								</td>
+							</tr>
+							<tr>	
+									<td><div id="10">Please describe the issue</div></td>
+									<td colspan=3><textarea id="details" rows="5" columns="100" style="width: 613px; height: 163px;">
+Number of Impacted users: 
+Is there any work around available? : 
+Problem in your own words:
+									</textarea></td>
+							</tr>
+						</tbody>
+					</table>
+				</td></tr>
+				<tr>
+					<td align="right"><input type="reset" value="Reset" id="reset"></td>
+					<td><input type="button" value="Copy to Clipboard" id="ctc" onclick="copytext()"></td>
+				</tr>
+		</tbody>
+		</table>
+		</form>
+		<form style="display: none" id="certq">
+				<table>
+					<tr>
+						<td><div id="certq1">Are you able to access http://ip.zscaler.com? </div></td>
+						<td>
+							<select id="certqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>	
+					<tr>
+						<td><div id="certq2">Are you able to access any other website? </div></td>
+						<td>
+							<select id="certqa2">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq3">If Question 1 & 2 are "No"; has Internet circuit & ZCC/tunnel connection been validated as operational? </div></td>
+						<td>
+							<select id="certqa3">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq4">Has any ticket been opened with Internet service provider ,incase tunnel is not operational? </div></td>
+						<td>
+							<select id="certqa4">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq5">Was this access working before? </div></td>
+						<td>
+							<select id="certqa5">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq6">Target Website URL </div></td>
+						<td><input id="certqa6" type="textbox" /></td>
+					</tr>
+					<tr>
+							<td><div id="certq7">Is access working to the website from different Browser? </div></td>
+						<td>
+							<select id="certqa7">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq8">Is access working to the website from different Computer? </div></td>
+						<td>
+							<select id="certqa8">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq9">Are you able to reach any other network destination? </div></td>
+						<td>
+							<select id="certqa9">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="certq10">Browser Version / Browser Name </div></td>
+						<td><input id="certqa10" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="certq11">Output of the website which user is trying to access(Attach with MDS) </div></td>
+						<td><input id="certqa11" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="certq12">Output of http://ip.zscaler.com (Attached with the MDS) </div></td>
+						<td><input id="certqa12" type="textbox" /></td>
+					</tr>
+				</table>
+				</form>
+				<form style="display: none" id="iconnq" class="icq">
+				<table>
+					<tr>
+						<td><div id="iconnq1">Are you able to access http://ip.zscaler.com? </div></td>
+						<td>
+							<select id="iconnqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq2">Are you able to access any other website? </div></td>
+						<td>
+							<select id="iconnqa2">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq3">If Question 1 & 2 are "No"; has Internet circuit & ZCC/tunnel connection been validated as operational? </div></td>
+						<td>
+							<select id="iconnqa3">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq4">Has any ticket been opened with Internet service provider, incase tunnel is not operational? </div></td>
+						<td>
+							<select id="iconnqa4">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq5">How often & when it happens?  </div></td>
+						<td><input id="iconnqa5" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="iconnq6">When was this access working before?  </div></td>
+						<td><input id="iconnqa6" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="iconnq7">Target Website URL  </div></td>
+						<td><input id="iconnqa7" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="iconnq8">Is access working to the website from different Browser?  </div></td>
+						<td>
+							<select id="iconnqa8">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq9">Is access working to the  website from different Computer?  </div></td>
+						<td>
+							<select id="iconnqa9">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq10">Are you able to reach any other network destination? </div></td>
+						<td>
+							<select id="iconnqa10">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="iconnq11">Browser Version / Browser Name  </div></td>
+						<td><input id="iconnqa11" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="iconnq12">Output of the website which user is trying to access(Attach with MDS) </div></td>
+						<td><input id="iconnqa12" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="iconnq13">Output of http://ip.zscaler.com (Attached with the MDS)</div></td>
+						<td><input id="iconnqa13" type="textbox" /></td>
+					</tr>
+				</table>
+				</form>
+				<form style="display: none" id="latencyq">
+				<table>
+					<tr>
+						<td><div id="latencyq1">Are you able to access http://ip.zscaler.com? </div></td>
+						<td>
+							<select id="latencyqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="latencyq2">Target Website URL </div></td>
+						<td><input id="latencyqa2" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="latencyq3">When was access working last time? </div></td>
+						<td><input id="latencyqa3" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="latencyq4">Which Browser you are using?   </div></td>
+						<td><input id="latencyqa4" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="latencyq5">Is access working to the website from different Browser? </div></td>
+						<td>
+							<select id="latencyqa5">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="latencyq6">Is access working to the  website from different Computer? </div></td>
+						<td>
+							<select id="latencyqa6">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="latencyq7">Is issue occurring for any other website as well?  </div></td>
+						<td>
+							<select id="latencyqa7">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="latencyq8">Traceroute to the Destination resource </div></td>
+						<td><textarea id="latencyqa8"></textarea></td>
+					</tr>
+					
+				</table>
+				</form>
+				<form style="display: none" id="1webq">
+				<table>
+					<tr>
+						<td><div id="1webq1">Are you able to access http://ip.zscaler.com? </div></td>
+						<td>
+							<select id="1webqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq2">Are you able to access any other website? </div></td>
+						<td>
+							<select id="1webqa2">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq3">If Question 1 & 2 are "No" then ,Has Internet circuit & ZCC/tunnel connection been validated as operational?</div></td>
+						<td>
+							<select id="1webqa3">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq4">Has any ticket been opened with Internet service provider ,Incase tunnel is not operational? </div></td>
+						<td>
+							<select id="1webqa4">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq5">Was this access working before? </div></td>
+						<td>
+							<select id="1webqa5">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq6">Target Website URL </div></td>
+						<td><input id="1webqa6" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="1webq7">Is access working to the website from different Browser? </div></td>
+						<td>
+							<select id="1webqa7">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq8">Is access working to the  website from different Computer? </div></td>
+						<td>
+							<select id="1webqa8">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq9">Are you able to reach any other network destination? </div></td>
+						<td>
+							<select id="1webqa9">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="1webq10">Browser Version / Browser Name </div></td>
+						<td><input id="1webqa10" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="1webq11">Output of the website which user is trying to access(Needs to be attached with MDS) </div></td>
+						<td><input id="1webqa11" type="textbox" /></td>
+					</tr>
+				</table>
+				</form>
+				<form style="display: none" id="anywebq">
+				<table>
+					<tr>
+						<td><div id="anywebq1">Has Internet circuit & ZCC/tunnel connection been validated as operational? </div></td>
+						<td>
+							<select id="anywebqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="anywebq2">Has any ticket been opened with Internet service provider ,incase tunnel is not operational? </div></td>
+						<td>
+							<select id="anywebqa2">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="anywebq3">When was access working last time? </div></td>
+						<td><input id="anywebqa3" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="anywebq4">Provide the Output of "ipconfig/all" and attach to attachments tab  </div></td>
+						<td><input id="anywebqa4" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="anywebq5">Are you able to reach any other network destination?  </div></td>
+						<td>
+							<select id="anywebqa5">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				</form>
+				<form style="display: none" id="authq">
+				<table>
+					<tr>
+						<td><div id="authq1">Are you able to access http://ip.zscaler.com?  </div></td>
+						<td>
+							<select id="authqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq2">Are you able to access any other website? </div></td>
+						<td>
+							<select id="authqa2">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq3">If Question 1 & 2 are "No" then ,Has Internet circuit & ZCC/tunnel connection been validated as operational? </div></td>
+						<td>
+							<select id="authqa3">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq4">Has any ticket been opened with Internet service provider ,Incase tunnel is not operational? </div></td>
+						<td>
+							<select id="authqa4">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="auth5">Has authentication server been validated?</div></td>
+						<td>
+							<select id="authqa5">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq6">Target Website URL </div></td>
+						<td><input id="authq6" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="authq7">When was access working last time? </div></td>
+						<td><input id="authq7" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="authq8">Output of the website which user is trying to access (Attached with MDS)  </div></td>
+						<td><input id="authqa8" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="authq9">Which Browser you are using?  </div></td>
+						<td><input id="authqa9" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="authq10">Did you try to access the website from different Browser?  </div></td>
+						<td>
+							<select id="authqa10">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq11">Did you try to access the website from different Computer?  </div></td>
+						<td>
+							<select id="authqa11">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="authq12">Output of http://ip.zscaler.com (Attached with the MDS)</div></td>
+						<td><input id="authqa12" type="textbox">
+						</td>
+					</tr>
+				</table>
+				</form>
+				<form style="display: none" id="updownq">
+				<table>
+					<tr>
+						<td><div id="updownq1">Are you able to access http://ip.zscaler.com?  </div></td>
+						<td>
+							<select id="updownqa1">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="updownq2">What is issue you experiencing while Download / Upload?</div></td>
+						<td><input id="updownqa2" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="updownq3">What is the file size?</div></td>
+						<td><input id="updownqa3" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="updownq4">Is it happening with a specific website?</div></td>
+						<td>
+							<select id="updownqa4">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="updownq5">When was it working last time?</div></td>
+						<td><input id="updownqa5" type="textbox" /></td>
+					</tr>
+					<tr>
+						<td><div id="updownq6">Do you get any error?</div></td>
+						<td>
+							<select id="updownqa6">
+								<option value="NA" Selected>N/A</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><div id="updownq7">Target Website URL</div></td>
+						<td><input id="updownqa7" type="textbox" /></td>
+					</tr>
+				</table>
+			</form>
+	
+<form style="display: none" id="zdxq">
+  <table>
+    <tr>
+      <td><div id="zdxq1">Is ZDX connector installed and running?</div></td>
+      <td>
+        <select id="zdxqa1">
+          <option value="NA" Selected>N/A</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><div id="zdxq2">Has the device been recently rebooted?</div></td>
+      <td>
+        <select id="zdxqa2">
+          <option value="NA" Selected>N/A</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><div id="zdxq3">Are user experience scores visible in the ZDX dashboard?</div></td>
+      <td>
+        <select id="zdxqa3">
+          <option value="NA" Selected>N/A</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><div id="zdxq4">Is the application experiencing issues listed under App Insights?</div></td>
+      <td>
+        <select id="zdxqa4">
+          <option value="NA" Selected>N/A</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><div id="zdxq5">Have any alerts been triggered in ZDX?</div></td>
+      <td>
+        <select id="zdxqa5">
+          <option value="NA" Selected>N/A</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+</form>
+
+
+
+
+
+</div>
+<div class="escalation-section">
+  <b style="color: #002244;">Escalate when ticket is not being updated on time</b><br><br>
+  <b>24 x 7 Cybersecurity Ops - MSS Global Support Group</b><br>
+  Can be reached by dialing <b>+1 877 677 2881</b> followed by your Pin Number<br><br>
+
+  <b>Escalation/Notification Table</b><br><br>
+  <table>
+    <tr><th>Title</th><th>Contact</th><th>Escalation Turn-Around</th></tr>
+    <tr>
+      <td>LevelBlue Cybersecurity Ops - MSS / Duty Manager</td>
+      <td>877-677-2881</td>
+      <td>Immediate</td>
+    </tr>
+    <tr>
+      <td rowspan="3">LevelBlue Cybersecurity Ops Associate Director</td>
+      <td>Prasad Ranganathan<br>prasad.ranganathan@levelblue.com</td>
+      <td rowspan="3">30 Minutes</td>
+    </tr>
+    <tr><td>Jamir Nadaf<br>jamir.nadaf@levelblue.com</td></tr>
+    <tr><td>Koteswara Banavathu<br>koteswara.banavathu@levelblue.com</td></tr>
+    <tr>
+      <td>LevelBlue Cybersecurity Director</td>
+      <td>Sunil Arockiaraj<br>sunil.arockiaraj@levelblue.com</td>
+      <td>3 hours</td>
+    </tr>
+    <tr>
+      <td>LevelBlue Cybersecurity AVP</td>
+      <td>Allison Clelan<br>allison.clelan@levelblue.com</td>
+      <td>4 hours</td>
+    </tr>
+  </table>
+</div>
+</div>
+</body>
+
+
+
+</html>
